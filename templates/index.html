@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">FastAPI Web App</div>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/items">Items</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Welcome to FastAPI Web App</h1>
+                <p>A modern web application built with FastAPI and Python</p>
+                
+                <!-- Content visible only to non-authenticated users -->
+                <div class="non-auth-content">
+                    <p>Please <a href="/login">login</a> or <a href="/register">register</a> to access all features.</p>
+                </div>
+                
+                <!-- Content visible only to authenticated users -->
+                <div class="auth-content" style="display: none;">
+                    <p>Welcome back, <span id="user-greeting">User</span>!</p>
+                    <div class="button-group">
+                        <button id="fetch-data">Fetch Data</button>
+                        <a href="/items" class="button">Manage Items</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="container">
+                <h2>Items</h2>
+                <div id="items-container" class="items-grid">
+                    <!-- Items will be loaded here via JavaScript -->
+                    <p>Loading items...</p>
+                </div>
+                <div class="items-action">
+                    <a href="/items" class="view-all">View All Items</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 FastAPI Web App</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/auth.js') }}"></script>
+    <script>
+        // Update user greeting with username from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    const userGreeting = document.getElementById('user-greeting');
+                    if (userGreeting && user.username) {
+                        userGreeting.textContent = user.username;
+                    }
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                }
+            }
+        });
+    </script>
+    <style>
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary-color);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: var(--light-bg);
+        }
+        
+        .items-action {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .view-all {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .view-all:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</body>
+</html> 

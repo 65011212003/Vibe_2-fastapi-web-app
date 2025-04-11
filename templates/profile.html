@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - FastAPI Web App</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/auth.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">FastAPI Web App</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/profile" class="active">Profile</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="profile-container">
+            <div class="auth-form profile-card">
+                <h1>User Profile</h1>
+                
+                <div id="profile-loading">Loading profile...</div>
+                
+                <div id="profile-content" style="display: none;">
+                    <div class="profile-field">
+                        <label>Username:</label>
+                        <p id="profile-username"></p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Email:</label>
+                        <p id="profile-email"></p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Full Name:</label>
+                        <p id="profile-fullname"></p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Account Created:</label>
+                        <p id="profile-created"></p>
+                    </div>
+                    
+                    <div class="profile-actions">
+                        <button id="logout-btn-profile" class="danger-btn">Logout</button>
+                    </div>
+                </div>
+                
+                <div id="profile-error" class="message error-message" style="display: none;">
+                    You must be logged in to view this page. 
+                    <a href="/login">Login</a> or <a href="/register">Register</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 FastAPI Web App</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', path='/js/auth.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileLoading = document.getElementById('profile-loading');
+            const profileContent = document.getElementById('profile-content');
+            const profileError = document.getElementById('profile-error');
+            
+            // Check if user is logged in
+            const userData = localStorage.getItem('user_data');
+            const token = localStorage.getItem('auth_token');
+            
+            if (!userData || !token) {
+                // User is not logged in
+                profileLoading.style.display = 'none';
+                profileError.style.display = 'block';
+                return;
+            }
+            
+            try {
+                // Parse user data
+                const user = JSON.parse(userData);
+                
+                // Populate profile data
+                document.getElementById('profile-username').textContent = user.username;
+                document.getElementById('profile-email').textContent = user.email;
+                document.getElementById('profile-fullname').textContent = user.full_name || 'Not provided';
+                
+                // Format date
+                const createdDate = new Date(user.created_at);
+                document.getElementById('profile-created').textContent = createdDate.toLocaleString();
+                
+                // Show profile content
+                profileLoading.style.display = 'none';
+                profileContent.style.display = 'block';
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                profileLoading.style.display = 'none';
+                profileError.textContent = 'Error loading profile data.';
+                profileError.style.display = 'block';
+            }
+            
+            // Handle logout button
+            const logoutBtn = document.getElementById('logout-btn-profile');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('user_data');
+                    window.location.href = '/login';
+                });
+            }
+        });
+    </script>
+    
+    <style>
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 200px);
+            padding: 2rem 0;
+        }
+        
+        .profile-card {
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .profile-field {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+        
+        .profile-field label {
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-field p {
+            margin: 0;
+        }
+        
+        .profile-actions {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .danger-btn {
+            background-color: #e74c3c;
+        }
+        
+        .danger-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</body>
+</html> 

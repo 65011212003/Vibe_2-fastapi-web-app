@@ -1,0 +1,29 @@
+{
+    "items": {
+        "1": {
+            "id": "1",
+            "name": "Item 1 Test ",
+            "description": "This is item 1 Test edit"
+        },
+        "2": {
+            "id": "2",
+            "name": "Item 2",
+            "description": "This is item 2"
+        },
+        "3": {
+            "id": "temp",
+            "name": "Cat goods",
+            "description": "Foods water and other useful item for cat"
+        }
+    },
+    "users": {
+        "1": {
+            "id": "edcd1055-679d-49c5-b1a3-349ac6552f39",
+            "username": "123",
+            "email": "65011212003@msu.ac.th",
+            "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+            "full_name": "123",
+            "created_at": "2025-04-11T11:48:40.825108"
+        }
+    }
+}
